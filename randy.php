@@ -19,8 +19,6 @@ class Exerciser
         array('istumaannousu' => array(3,9)),
         array('selkäliike' => array(7,80))
     );
-    private $repetitionsMin = 1;
-    private $repetitionsMax = 14;
     // End configurationable
 
     private $exercisesAssigned = array();
@@ -33,7 +31,6 @@ class Exerciser
     }
 
     private function getRandomExercise() {
-        //mt_srand(substr(microtime(), 2, 8));
       $routineName = $this->routines[mt_rand(0, count($this->routines) - 1)];
       return $routineName;
     }
@@ -74,7 +71,7 @@ class Exerciser
         }
     }
 
-    public function addView($view) {
+    public function addView(View $view) {
         $this->views[] = $view;
     }
 }
