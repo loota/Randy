@@ -1,22 +1,23 @@
 <?php
 // Usage:
+//  show <number> of exercises
+//   php randy.php <number>
 //
 //  start interactive mode
 //   php randy.php
 //
-//  show <number> of exercises
-//   php randy.php <number>
+//  In the interactive mode, enter key shows one exercise. Typing a number and 
+//  then enter shows <number> exercises
 
 class Exerciser
 {
     // @TODO Move these to configuration files.
     // Configurationable
-    // TODO Make the reps configurable per routine, e.g. 'sukelluspunnerrus' => array(5,8),
     private $routines = array(
-        'sukelluspunnerrus',
-        'kyykky',
-        'istumaannousu',
-        'selkäliike'
+        array('sukelluspunnerrus' => array(500,800)),
+        array('kyykky' => array(1,2)),
+        array('istumaannousu' => array(3,9)),
+        array('selkäliike' => array(7,80))
     );
     private $repetitionsMin = 1;
     private $repetitionsMax = 14;
@@ -31,15 +32,16 @@ class Exerciser
         }
     }
 
-    private function getRandomExerciseName() {
+    private function getRandomExercise() {
         //mt_srand(substr(microtime(), 2, 8));
       $routineName = $this->routines[mt_rand(0, count($this->routines) - 1)];
       return $routineName;
     }
 
-    private function getRandomRepetitions() {
-      $repetitions =  mt_rand($this->repetitionsMin, $this->repetitionsMax);
-      return $repetitions;
+    private function getRandomRepetitions($exerciseData) {
+        $repetitionData = array_pop($exerciseData);
+        $repetitions =  mt_rand($repetitionData[0], $repetitionData[1]);
+        return $repetitions;
     }
 
     public function startInteractiveMode() {
@@ -59,8 +61,9 @@ class Exerciser
 
     public function showExercises($number) {
         for ($i=0; $i<$number; $i++) {
-              $exercise = $this->getRandomExerciseName();
-              $reps     = $this->getRandomRepetitions();
+              $exerciseData = $this->getRandomExercise();
+              $reps     = $this->getRandomRepetitions($exerciseData);
+              $exercise = key($exerciseData);
 
               // @TODO This happens only because of a lack of better way to 
               // communicate to rupter program an exercise.
