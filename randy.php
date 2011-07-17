@@ -6,18 +6,20 @@
 //  start interactive mode
 //   php randy.php
 //
-//  In the interactive mode, enter key shows one exercise. Typing a number and 
-//  then enter shows <number> exercises
+//  In the interactive mode: 
+//  q quits
+//  enter key shows one exercise. 
+//  Typing a number and  then enter shows <number> exercises
 
 class Exerciser
 {
     // @TODO Move these to configuration files.
     // Configurationable
     private $routines = array(
-        array('sukelluspunnerrus' => array(500,800)),
-        array('kyykky' => array(1,2)),
-        array('istumaannousu' => array(3,9)),
-        array('selkäliike' => array(7,80))
+        array('sukelluspunnerrus' => array(1,10)),
+        array('kyykky' => array(1,10)),
+        array('istumaannousu' => array(2,12)),
+        array('selkäliike' => array(3,15))
     );
     // End configurationable
 
@@ -44,8 +46,7 @@ class Exerciser
     public function startInteractiveMode() {
         while (true) {
           // @TODO Encapsulate the input somewhere.
-          // @TODO 40 char limit to what should be written as a command.
-          $gotKey = fgets(STDIN, 40);  
+          $gotKey = fgets(STDIN);  
           if ($gotKey === "q\n") {
               break;
           }
