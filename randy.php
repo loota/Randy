@@ -1,34 +1,22 @@
 <?php
-// Usage:
-//  show <number> of exercises
-//   php randy.php <number>
-//
-//  start interactive mode
-//   php randy.php
-//
-//  In the interactive mode: 
-//  q quits
-//  enter key shows one exercise. 
-//  Typing a number and  then enter shows <number> exercises
-
 class Exerciser
 {
     // @TODO Move these to configuration files.
     // Configurationable
     private $routines = array(
-        array('sukelluspunnerrus' => array(1,10)),
-        array('kyykky' => array(1,10)),
-        array('istumaannousu' => array(2,12)),
-        array('selkäliike' => array(3,15))
+        array('sukelluspunnerrus' => array(1, 10)),
+        array('kyykky' => array(1, 10)),
+        array('istumaannousu' => array(2, 12)),
+        array('selkäliike' => array(3, 15))
     );
     // End configurationable
 
     private $exercisesAssigned = array();
     private $views = array();
 
-    private function sendToViews($exerciseName, $repetitions) {
+    private function sendToViews($exercises) {
         foreach ($this->views as $view) {
-            $view->show($exerciseName, $repetitions);
+            $view->show($exercises);
         }
     }
 
@@ -43,33 +31,17 @@ class Exerciser
         return $repetitions;
     }
 
-    public function startInteractiveMode() {
-        while (true) {
-          // @TODO Encapsulate the input somewhere.
-          $gotKey = fgets(STDIN);  
-          if ($gotKey === "q\n") {
-              break;
-          }
-          if (is_integer((int) substr($gotKey, 0, mb_strlen($gotKey) - 1))) {
-              $this->showExercises($gotKey - 1);
-          }
-          $this->showExercises(1);
-        }
-    }
-
     public function showExercises($number) {
-        for ($i=0; $i<$number; $i++) {
-              $exerciseData = $this->getRandomExercise();
-              $reps     = $this->getRandomRepetitions($exerciseData);
-              $exercise = key($exerciseData);
-
-              // @TODO This happens only because of a lack of better way to 
-              // communicate to rupter program an exercise.
-              file_put_contents('/tmp/randy.tmp', $exercise . ' ' . $reps . "\n"); 
-
+        $exercises = array();
+        for ($i=0; $i < $number; $i++) {
+              $exerciseData              = $this->getRandomExercise();
+              $reps                      = $this->getRandomRepetitions($exerciseData);
+              $exercise                  = key($exerciseData);
               $this->exercisesAssigned[] = $exercise;
-              $this->sendToViews($exercise, $reps);
+
+              $exercises[] = array($exercise => $reps);
         }
+        $this->sendToViews($exercises);
     }
 
     public function addView(View $view) {
@@ -78,13 +50,7 @@ class Exerciser
 }
 
 interface View {
-    public function show($exerciseName, $repetitions);
-}
-
-class CommandLineView implements View {
-    public function show($exerciseName, $repetitions) {
-        echo $exerciseName . ' ' . $repetitions . "\n";
-    }
+    public function show($exercises);
 }
 
 class FileLoggingView implements View {
@@ -92,20 +58,12 @@ class FileLoggingView implements View {
     public function __construct() {
         $this->startTime = time();
     }
-    public function show($exerciseName, $repetitions) {
-        file_put_contents('exerciseLogs/' . $this->startTime, 
-            $exerciseName . ' ' . $repetitions . "\n", FILE_APPEND);
+    public function show($exercises) {
+        foreach ($exercises as $exercise) {
+            $name = key($exercise);
+            $repetitions = array_pop($exercise);
+            file_put_contents('exerciseLogs/' . $this->startTime, 
+                $name . ' ' . $repetitions . "\n", FILE_APPEND);
+        }
     }
-}
-$exer = new Exerciser();
-$exer->addView(new CommandLineView());
-$exer->addView(new FileLoggingView());
-
-$passedArgs = $argv;
-array_shift($passedArgs);
-$numberOfExercises = (int) array_shift($passedArgs);
-if (($numberOfExercises > 0)) {
-    $exer->showExercises($numberOfExercises);
-} else {
-    $exer->startInteractiveMode();
 }
