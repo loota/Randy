@@ -12,6 +12,7 @@
 //  Typing a number and  then enter shows <number> exercises
 
 require_once 'randy.php';
+
 class CommandLineExerciser extends Exerciser {
     public function startInteractiveMode() {
         while (true) {
@@ -28,7 +29,7 @@ class CommandLineExerciser extends Exerciser {
 }
 
 class CommandLineView implements View {
-    public function show($exercises) {
+    public function show(array $exercises) {
         foreach ($exercises as $exercise) {
             $name = key($exercise);
             $repetitions = array_pop($exercise);

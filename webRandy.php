@@ -1,8 +1,12 @@
 <?php
+// Usage:
+// Use a GET parameter number to signify how many exercises should be shown. If 
+// there is no such parameter, shows one exercise.
+
 require_once 'randy.php';
 
 class WebView implements View {
-    public function show($exercises) {
+    public function show(array $exercises) {
         echo "<html>\n<dl>\n";
         foreach ($exercises as $exercise) {
             $name = key($exercise);
