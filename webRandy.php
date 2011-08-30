@@ -25,4 +25,3 @@ if ($number > 0) {
 } else {
     $exer->showExercises(1);
 }
-

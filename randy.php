@@ -6,7 +6,7 @@
  *  @TODO Add doc comments
  * 
  *   The main data format for exercises is the following:
- *   Each exercise consists in the key, which is the name of the exercise 
+ *   Each exercise consists in a key, which is the name of the exercise 
  *   and the value, which is an array containing two cells. The first number 
  *   contains the minimum number of repetitions, and the second cell contains 
  *   the maximum number of repetitions.
@@ -37,11 +37,15 @@ class Exerciser
         $exercises = file('exercises/default.txt');
         foreach ($exercises as $line) {
             $exerciseArray = preg_split('/ +/', $line);
+            $exerciseArray[2] = str_replace("\n", "", $exerciseArray[2]);
             $routine = array($exerciseArray[0] => array($exerciseArray[1], $exerciseArray[2]));
             $this->routines[] = $routine;
         }
     }
-
+    /**
+     * @var array $exercises See interface View for documentation on the data 
+     * format.
+     */
     private function sendToViews(array $exercises) {
         foreach ($this->views as $view) {
             $view->show($exercises);
@@ -85,7 +89,7 @@ class Exerciser
 interface View {
     /**
      * @aparam array $exercises Contains an exercise for each cell in the array. 
-     *   Each exercise consists in the key, which is the name of the exercise 
+     *   Each exercise consists in a key, which is the name of the exercise 
      *   and the value, which is the number of repetitions.
      *   Example:
      *     array(1) {

@@ -1,4 +1,5 @@
 <?php
+// @TODO Add Usage to cli
 // Usage:
 //  show <number> of exercises
 //   php randy.php <number>
@@ -9,7 +10,7 @@
 //  In the interactive mode: 
 //  q quits
 //  enter key shows one exercise. 
-//  Typing a number and  then enter shows <number> exercises
+//  Typing a number and then enter shows <number> exercises
 
 require_once 'randy.php';
 
@@ -29,10 +30,6 @@ class CommandLineExerciser extends Exerciser {
 }
 
 class CommandLineView implements View {
-    /**
-      * @param $exercises array of arrays. First array contains the exercise 
-      * arrays, which of each contain as key the exercise name and as value the repetitions.
-      */
     public function show(array $exercises) {
         foreach ($exercises as $exercise) {
             $name = key($exercise);
