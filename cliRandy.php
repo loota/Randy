@@ -29,6 +29,10 @@ class CommandLineExerciser extends Exerciser {
 }
 
 class CommandLineView implements View {
+    /**
+      * @param $exercises array of arrays. First array contains the exercise 
+      * arrays, which of each contain as key the exercise name and as value the repetitions.
+      */
     public function show(array $exercises) {
         foreach ($exercises as $exercise) {
             $name = key($exercise);
@@ -40,12 +44,15 @@ class CommandLineView implements View {
 
 $exer = new CommandLineExerciser();
 $exer->addView(new CommandLineView());
-$exer->addView(new FileLoggingView());
+// @TODO Add proper handling of options
+if ($argv[1] !== '--no-log' && $argv[2] !== '--no-log') {
+    $exer->addView(new FileLoggingView());
+}
 
 $passedArgs = $argv;
 array_shift($passedArgs);
 $numberOfExercises = (int) array_shift($passedArgs);
-if (($numberOfExercises > 0)) {
+if ($numberOfExercises > 0) {
     $exer->showExercises($numberOfExercises);
 } else {
     $exer->startInteractiveMode();

@@ -1,36 +1,26 @@
 <?php
+/**
+ *  The Exerciser class outputs to View objects, which are defined by the 
+ *  subclass. 
+ *
+ * @TODO Add doc comments
+ */
 class Exerciser
 {
-    // @TODO Move these to configuration files.
-    // Configurable
-    //private $routines = array(
-        //array('sukelluspunnerrus' => array(1, 10)),
-        //array('kyykky' => array(1, 10)),
-        //array('istumaannousu' => array(2, 12)),
-        //array('selkäliike' => array(3, 15))
-    //);
-    //private $routines = array(
-        //array('sormipunnerrus' => array(1, 3)),
-        //array('punnerrus' => array(1, 10)),
-        //array('leveä punnerrus' => array(1, 10)),
-        //array('kapea punnerrus' => array(1, 3)),
-        //array('sukelluspunnerrus' => array(1, 5)),
-        //array('yhden käden punnerrus' => array(1, 3)),
-        //array('nyrkkipunnerrus' => array(1, 5)),
-        //array('helpotettu punnerrus' => array(1, 10))
-    //);
-    
-    private $routines = array(
-        array('istumaannousu' => array(1, 8)),
-        array('rutistus' => array(2, 10)),
-        array('jalkojen nosto' => array(1, 5)),
-        array('sivuttainen istumaannousu' => array(1, 5)),
-        array('lankku' => array(3, 15))
-    );
-    // End configurable
-
+    private $routines = array();
     private $exercisesAssigned = array();
     private $views = array();
+
+    public function __construct() {
+        $this->routines = array();
+        // @TODO Get this file dynamically
+        $exercises = file('exercises/default.txt');
+        foreach ($exercises as $line) {
+            $exerciseArray = preg_split('/ +/', $line);
+            $routine = array($exerciseArray[0] => array($exerciseArray[1], $exerciseArray[2]));
+            $this->routines[] = $routine;
+        }
+    }
 
     private function sendToViews(array $exercises) {
         foreach ($this->views as $view) {
