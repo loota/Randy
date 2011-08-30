@@ -3,10 +3,30 @@
  *  The Exerciser class outputs to View objects, which are defined by the 
  *  subclass. 
  *
- * @TODO Add doc comments
+ *  @TODO Add doc comments
+ * 
+ *   The main data format for exercises is the following:
+ *   Each exercise consists in the key, which is the name of the exercise 
+ *   and the value, which is an array containing two cells. The first number 
+ *   contains the minimum number of repetitions, and the second cell contains 
+ *   the maximum number of repetitions.
+ *   Example:
+ *      array(1) {
+ *        ["push-up"]=>
+ *          array(2) {
+ *            [0]=>
+ *            string(1) "1"
+ *            [1]=>
+ *            string(3) "10"
+ *          }
+ *      }
+ *
  */
 class Exerciser
 {
+    /**
+     * @var array $routines the main data format. See the class documentation
+     */
     private $routines = array();
     private $exercisesAssigned = array();
     private $views = array();
@@ -33,12 +53,17 @@ class Exerciser
         return $routineName;
     }
 
-    private function getRandomRepetitions($exerciseData) {
+    /**
+     * @param array $exerciseData the main data format. See the class documentation
+     */
+    private function getRandomRepetitions(array $exerciseData) {
         $repetitionData = array_pop($exerciseData);
         $repetitions =  mt_rand($repetitionData[0], $repetitionData[1]);
         return $repetitions;
     }
-
+    /*
+     * @param int $number
+     */
     public function showExercises($number) {
         $exercises = array();
         for ($i=0; $i < $number; $i++) {
@@ -58,6 +83,16 @@ class Exerciser
 }
 
 interface View {
+    /**
+     * @aparam array $exercises Contains an exercise for each cell in the array. 
+     *   Each exercise consists in the key, which is the name of the exercise 
+     *   and the value, which is the number of repetitions.
+     *   Example:
+     *     array(1) {
+     *      ["push-up"]=>
+     *      int(3)
+     *    }
+     */
     public function show(array $exercises);
 }
 
