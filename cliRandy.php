@@ -1,17 +1,5 @@
 <?php
 // @TODO Add Usage to cli
-// Usage:
-//  show <number> of exercises
-//   php randy.php <number>
-//
-//  start interactive mode
-//   php randy.php
-//
-//  In the interactive mode: 
-//  q quits
-//  enter key shows one exercise. 
-//  Typing a number and then enter shows <number> exercises
-
 require_once 'randy.php';
 
 class CommandLineExerciser extends Exerciser {
@@ -26,6 +14,22 @@ class CommandLineExerciser extends Exerciser {
           }
           $this->showExercises(1);
         }
+    }
+
+    public function usage()
+    {
+        $usage = "Usage: php cliRandy.php [--no-log] [NUMBER OF EXERCISES]
+        * show <number> of exercises
+         php cliRandy.php <number>
+        
+        * start interactive mode
+         php cliRandy.php
+        
+        * In the interactive mode the following commands apply: 
+            q quits
+            enter key shows one exercise. 
+            Typing a number and then enter shows that number of exercises";
+        return $usage;
     }
 }
 
