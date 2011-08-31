@@ -15,22 +15,6 @@ class CommandLineExerciser extends Exerciser {
           $this->showExercises(1);
         }
     }
-
-    public function usage()
-    {
-        $usage = "Usage: php cliRandy.php [--no-log] [NUMBER OF EXERCISES]
-        * show <number> of exercises
-         php cliRandy.php <number>
-        
-        * start interactive mode
-         php cliRandy.php
-        
-        * In the interactive mode the following commands apply: 
-            q quits
-            enter key shows one exercise. 
-            Typing a number and then enter shows that number of exercises";
-        return $usage;
-    }
 }
 
 class CommandLineView implements View {
@@ -43,16 +27,63 @@ class CommandLineView implements View {
     }
 }
 
+function usage()
+{
+    $usage = "Usage: php cliRandy.php [--no-log] [NUMBER OF EXERCISES]
+    Show <number> of exercises
+     php cliRandy.php <number>
+    
+    * start interactive mode
+     php cliRandy.php
+    
+    * In the interactive mode the following commands apply: 
+        q quits
+        enter key shows one exercise. 
+        Typing a number and then enter shows that number of exercises";
+    return $usage;
+}
+
 $exer = new CommandLineExerciser();
 $exer->addView(new CommandLineView());
+
 // @TODO Add proper handling of options
-if ($argv[1] !== '--no-log' && $argv[2] !== '--no-log') {
+
+$optionFound = false;
+$logging = true;
+$numberOfExercises = 0;
+
+array_shift($argv);
+foreach ($argv as $option => $optionValue) {
+    switch ($optionValue) {
+        case is_numeric($optionValue) :
+            if ($numberOfExercises) {
+                echo 'cliRandy: number of exercises must be given only once.' . "\n";
+                echo "Try `php cliRandy.php --help' for more information\n";
+                exit();
+            }
+            $numberOfExercises = $optionValue;
+            break;
+        case '-n':
+            $logging = false;
+            break;
+        case '--no-log':
+            $logging = false;
+            break;
+        case '--help':
+            exit(usage());
+            break;
+        default:
+            echo "cliRandy: invalid option -- '" . $optionValue . "'\n\n";
+            echo "Try `php cliRandy.php --help' for more information\n";
+            exit();
+
+    }
+}
+
+if ($logging) {
     $exer->addView(new FileLoggingView());
 }
 
-$passedArgs = $argv;
-array_shift($passedArgs);
-$numberOfExercises = (int) array_shift($passedArgs);
 if ($numberOfExercises > 0) {
     $exer->showExercises($numberOfExercises);
 } else {
