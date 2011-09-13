@@ -25,42 +25,79 @@
 class Exerciser
 {
     /**
-     * @var array $routines the main data format. See the class documentation
+     * @var array $_routines the main data format. See the class documentation
      */
-    private $routines = array();
-    private $exercisesAssigned = array();
-    private $views = array();
+    private $_routines = array();
 
-    public function __construct() {
-        $this->routines = array();
-        // @TODO Get this file dynamically
-        $exercises = file('exercises/default.txt');
-        foreach ($exercises as $line) {
-            $exerciseArray = preg_split('/ +/', $line);
-            $exerciseArray[2] = str_replace("\n", "", $exerciseArray[2]);
-            $routine = array($exerciseArray[0] => array($exerciseArray[1], $exerciseArray[2]));
-            $this->routines[] = $routine;
+    /**
+     * @var array $_views array of View objects that actually decide how to show
+     * the assigned exercise.
+     */
+    private $_views = array();
+
+    /**
+     * @param array $exercises see the top of this file for the description of 
+     * the data format.
+     *
+     */
+    public function __construct($filename = false)
+    {
+        if (!$filename) {
+            $filename = 'exercises/default.txt';
         }
+        $this->_routines = $this->_getExercisesFromFile($filename);
     }
+
+    /**
+     * @param array of string lines containing exercise name, 
+     *   minimum repetitions and maximum repetitions. There must be a colon (:) 
+     *   between the name of the exercise and the min and max numbers. The min 
+     *   and max numbers must be separated by spaces.
+     *   Example:
+     *  squat:   1   10
+     *  crunch:  1   10
+     */
+    private function _getExercisesFromFile($filename)
+    {
+        $exercises = array();
+        $lines = file($filename);
+        foreach ($lines as $line) {
+            $exerciseArray = preg_split('/:/', $line);
+            $exerciseName = $exerciseArray[0];
+            $trimmedMinAndMax = trim($exerciseArray[1]);
+            $minAndMax = preg_split('/ +/', $trimmedMinAndMax);
+            $minimum = $minAndMax[0];
+            $maximum = $minAndMax[1];
+            $maximum = str_replace("\n", "", $maximum);
+            $routine = array($exerciseName => array($minimum, $maximum));
+            $exercises[] = $routine;
+        }
+        return $exercises;
+    }
+
+
     /**
      * @var array $exercises See interface View for documentation on the data 
      * format.
      */
-    private function sendToViews(array $exercises) {
-        foreach ($this->views as $view) {
+    private function sendToViews(array $exercises)
+    {
+        foreach ($this->_views as $view) {
             $view->show($exercises);
         }
     }
 
-    private function getRandomExercise() {
-        $routineName = $this->routines[mt_rand(0, count($this->routines) - 1)];
+    private function getRandomExercise()
+    {
+        $routineName = $this->_routines[mt_rand(0, count($this->_routines) - 1)];
         return $routineName;
     }
 
     /**
      * @param array $exerciseData the main data format. See the class documentation
      */
-    private function getRandomRepetitions(array $exerciseData) {
+    private function getRandomRepetitions(array $exerciseData)
+    {
         $repetitionData = array_pop($exerciseData);
         $repetitions =  mt_rand($repetitionData[0], $repetitionData[1]);
         return $repetitions;
@@ -68,21 +105,25 @@ class Exerciser
     /*
      * @param int $number
      */
-    public function showExercises($number) {
+    public function showExercises($number)
+    {
         $exercises = array();
         for ($i=0; $i < $number; $i++) {
               $exerciseData              = $this->getRandomExercise();
               $reps                      = $this->getRandomRepetitions($exerciseData);
               $exercise                  = key($exerciseData);
-              $this->exercisesAssigned[] = $exercise;
 
               $exercises[] = array($exercise => $reps);
         }
         $this->sendToViews($exercises);
     }
 
-    public function addView(View $view) {
-        $this->views[] = $view;
+    /**
+     * @param View $view
+     */
+    public function addView(View $view)
+    {
+        $this->_views[] = $view;
     }
 }
 
@@ -103,11 +144,13 @@ interface View {
 class FileLoggingView implements View {
     private $startTime = 0;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->startTime = time();
     }
 
-    public function show(array $exercises) {
+    public function show(array $exercises)
+    {
         foreach ($exercises as $exercise) {
             $name = key($exercise);
             $repetitions = array_pop($exercise);

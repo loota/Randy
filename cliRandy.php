@@ -29,35 +29,45 @@ class CommandLineView implements View {
 class ExerDriver
 {
     private $numberOfExercises = 0;
-    private $logging = true;
+    private $_logging = true;
+    private $_filename;
 
+    /**
+     * @param array $options command line options in the argv form
+     */
     private function _checkOptions($options)
     {
         if (is_array($options)) {
             // remove the filename
             array_shift($options);
 
-            foreach ($options as $option => $optionValue) {
-                switch ($optionValue) {
-                    case is_numeric($optionValue) :
+            foreach ($options as $optionString) {
+                $optionSplit = split('=', $optionString);
+                $option = $optionSplit[0];
+                $optionValue = $optionSplit[1];
+                switch ($option) {
+                    case is_numeric($option) :
                         if ($this->numberOfExercises) {
                             echo 'cliRandy: number of exercises must be given only once.' . "\n";
                             echo "Try `php cliRandy.php --help' for more information\n";
                             exit();
                         }
-                        $this->numberOfExercises = $optionValue;
+                        $this->numberOfExercises = $option;
                         break;
                     case '-n':
-                        $this->logging = false;
+                        $this->_logging = false;
                         break;
                     case '--no-log':
-                        $this->logging = false;
+                        $this->_logging = false;
+                        break;
+                    case '-f':
+                        $this->_filename = $optionValue;
                         break;
                     case '--help':
                         exit($this->_usage());
                         break;
                     default:
-                        echo "cliRandy: invalid option -- '" . $optionValue . "'\n\n";
+                        echo "cliRandy: invalid option -- '" . $option . "'\n\n";
                         echo "Try `php cliRandy.php --help' for more information\n";
                         exit();
 
@@ -67,11 +77,13 @@ class ExerDriver
 
     }
 
+    /**
+     *  @return string
+     */
     private function _usage()
     {
-        $usage = "Usage: php cliRandy.php [--no-log] [NUMBER OF EXERCISES]
+        $usage = "Usage: php cliRandy.php [-n] [--no-log] [-f filename] [number of exercises]
         Show <number> of exercises
-         php cliRandy.php <number>
         
         * start interactive mode
          php cliRandy.php
@@ -83,14 +95,17 @@ class ExerDriver
         return $usage;
     }
 
+    /**
+     * @param array $options command line options in the argv form
+     */
     public function main($options)
     {
         $this->_checkOptions($options);
 
-        $exer = new CommandLineExerciser();
+        $exer = new CommandLineExerciser($this->_filename);
         $exer->addView(new CommandLineView());
 
-        if ($this->logging) {
+        if ($this->_logging) {
             $exer->addView(new FileLoggingView());
         }
 
