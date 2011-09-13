@@ -1,0 +1,5 @@
+push-up:            1    10
+knuckle push-up:    1    10
+finger push-up:     2    12
+easy push-up:       3    15
+wide push-up:       1    5

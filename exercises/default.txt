@@ -1,0 +1,5 @@
+sukelluspunnerrus:   1   10
+kyykky:              1   10
+istumaannousu:       2   12
+selkäliike:          3   15
+hartiasilta:         1   5
