@@ -3,8 +3,6 @@
  *  The Exerciser class outputs to View objects, which are defined by the 
  *  subclass. 
  *
- *  @TODO Add doc comments
- * 
  *   The main data format for exercises is the following:
  *   Each exercise consists in a key, which is the name of the exercise 
  *   and the value, which is an array containing two cells. The first number 
@@ -25,7 +23,7 @@
 class Exerciser
 {
     /**
-     * @var array $_routines the main data format. See the class documentation
+     * @var array $_routines the main data format. @see Exerciser
      */
     private $_routines = array();
 
@@ -53,9 +51,12 @@ class Exerciser
      *   minimum repetitions and maximum repetitions. There must be a colon (:) 
      *   between the name of the exercise and the min and max numbers. The min 
      *   and max numbers must be separated by spaces.
+     *
      *   Example:
-     *  squat:   1   10
-     *  crunch:  1   10
+     *
+     *     squat:   1   10
+     *     crunch:  4   14
+     *
      */
     private function _getExercisesFromFile($filename)
     {
@@ -75,33 +76,35 @@ class Exerciser
         return $exercises;
     }
 
-
     /**
-     * @var array $exercises See interface View for documentation on the data 
-     * format.
+     * @var array $exercises the view data format. @see View
      */
-    private function sendToViews(array $exercises)
+    private function _sendToViews(array $exercises)
     {
         foreach ($this->_views as $view) {
             $view->show($exercises);
         }
     }
 
-    private function getRandomExercise()
+    /**
+     * @return string
+     */
+    private function _getRandomExercise()
     {
         $routineName = $this->_routines[mt_rand(0, count($this->_routines) - 1)];
         return $routineName;
     }
 
     /**
-     * @param array $exerciseData the main data format. See the class documentation
+     * @param array $exerciseData the main data format. @see Exerciser
      */
-    private function getRandomRepetitions(array $exerciseData)
+    private function _getRandomRepetitions(array $exerciseData)
     {
         $repetitionData = array_pop($exerciseData);
         $repetitions =  mt_rand($repetitionData[0], $repetitionData[1]);
         return $repetitions;
     }
+
     /*
      * @param int $number
      */
@@ -109,13 +112,13 @@ class Exerciser
     {
         $exercises = array();
         for ($i=0; $i < $number; $i++) {
-              $exerciseData              = $this->getRandomExercise();
-              $reps                      = $this->getRandomRepetitions($exerciseData);
-              $exercise                  = key($exerciseData);
+              $exerciseData = $this->_getRandomExercise();
+              $reps = $this->_getRandomRepetitions($exerciseData);
+              $exercise = key($exerciseData);
 
               $exercises[] = array($exercise => $reps);
         }
-        $this->sendToViews($exercises);
+        $this->_sendToViews($exercises);
     }
 
     /**
@@ -149,6 +152,9 @@ class FileLoggingView implements View {
         $this->startTime = time();
     }
 
+    /**
+     * @param array $exercises the view data format. @see View
+     */
     public function show(array $exercises)
     {
         foreach ($exercises as $exercise) {
