@@ -6,6 +6,9 @@
 require_once 'randy.php';
 
 class WebView implements View {
+    /**
+     * @param array $exercises view data format @see View
+     */
     public function show(array $exercises) {
         echo "<html>\n<dl>\n";
         foreach ($exercises as $exercise) {

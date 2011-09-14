@@ -1,6 +1,12 @@
 <?php
 require_once 'randy.php';
 
+/**
+ * Interactive command line input. Commands:
+ *  <Enter>          - show one exercise
+ *  <Number> <Enter> - show <Number> exercises
+ *  q                - Exit
+ */
 class CommandLineExerciser extends Exerciser {
     public function startInteractiveMode() {
         while (true) {
@@ -17,6 +23,9 @@ class CommandLineExerciser extends Exerciser {
 }
 
 class CommandLineView implements View {
+    /**
+     * @param array $exercises view data format. @see View
+     */
     public function show(array $exercises) {
         foreach ($exercises as $exercise) {
             $name = key($exercise);

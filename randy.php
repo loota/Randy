@@ -3,40 +3,45 @@
  *  The Exerciser class outputs to View objects, which are defined by the 
  *  subclass. 
  *
- *   The main data format for exercises is the following:
- *   Each exercise consists in a key, which is the name of the exercise 
- *   and the value, which is an array containing two cells. The first number 
- *   contains the minimum number of repetitions, and the second cell contains 
- *   the maximum number of repetitions.
- *   Example:
- *      array(1) {
- *        ["push-up"]=>
- *          array(2) {
- *            [0]=>
- *            string(1) "1"
- *            [1]=>
- *            string(3) "10"
- *          }
- *      }
- *
+ *  The main data format for exercises is the following:
+ *  Each exercise consists in a key, which is the name of the exercise 
+ *  and the value, which is an array containing two cells. The first number 
+ *  contains the minimum number of repetitions, and the second cell contains 
+ *  the maximum number of repetitions.
+ *  Example:
+ *     array(1) {
+ *       ["push-up"]=>
+ *         array(2) {
+ *           [0]=>
+ *           string(1) "1"
+ *           [1]=>
+ *           string(3) "10"
+ *         }
+ *     }
  */
 class Exerciser
 {
     /**
-     * @var array $_routines the main data format. @see Exerciser
+     * @var array $_routines in the main data format. @see Exerciser
      */
     private $_routines = array();
 
     /**
-     * @var array $_views array of View objects that actually decide how to show
-     * the assigned exercise.
+     * @var array $_views array of View objects that actually decide where to 
+     * output the assigned exercise.
      */
     private $_views = array();
 
     /**
-     * @param array $exercises see the top of this file for the description of 
-     * the data format.
+     * @param string name of file containing exercise configuration.
+     * Given file must contain one line per exercise. Each line must contain
+     * the exercise name ending with a colon (:), minimum repetitions and maximum repetitions. 
+     * The min and max numbers must be separated by spaces.
      *
+     * Example:
+     *
+     *   squat:   1   10
+     *   crunch:  4   14
      */
     public function __construct($filename = false)
     {
@@ -47,16 +52,8 @@ class Exerciser
     }
 
     /**
-     * @param array of string lines containing exercise name, 
-     *   minimum repetitions and maximum repetitions. There must be a colon (:) 
-     *   between the name of the exercise and the min and max numbers. The min 
-     *   and max numbers must be separated by spaces.
-     *
-     *   Example:
-     *
-     *     squat:   1   10
-     *     crunch:  4   14
-     *
+     * @param string $filename filename containing configuration data. @see 
+     * __construct for the format.
      */
     private function _getExercisesFromFile($filename)
     {
@@ -132,18 +129,24 @@ class Exerciser
 
 interface View {
     /**
-     * @aparam array $exercises Contains an exercise for each cell in the array. 
-     *   Each exercise consists in a key, which is the name of the exercise 
-     *   and the value, which is the number of repetitions.
-     *   Example:
-     *     array(1) {
-     *      ["push-up"]=>
-     *      int(3)
-     *    }
+     * @param array $exercises view data format.
+     * Contains one exercise for each cell in the array. 
+     * Each exercise consists in a key, which is the name of the exercise 
+     * and the value, which is the number of repetitions.
+     *
+     * Example:
+     *   array(1) {
+     *    ["push-up"]=>
+     *    int(3)
+     *  }
      */
     public function show(array $exercises);
 }
 
+/**
+ * Log the output to a file. The file will be named with a timestamp and will 
+ * end with the extension txt. 
+ */
 class FileLoggingView implements View {
     private $startTime = 0;
 
@@ -160,7 +163,7 @@ class FileLoggingView implements View {
         foreach ($exercises as $exercise) {
             $name = key($exercise);
             $repetitions = array_pop($exercise);
-            file_put_contents('exerciseLogs/' . $this->startTime, 
+            file_put_contents('exerciseLogs/' . $this->startTime . '.txt', 
                 $name . ' ' . $repetitions . "\n", FILE_APPEND);
         }
     }
