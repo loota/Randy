@@ -1,0 +1,11 @@
+php cliRandy.php 3
+sit-up 7
+back extension 14
+tiger pushup 3
+
+Configuration format:
+tiger pushup:    1   10
+squat:           1   10
+sit-up:          2   12
+back extension:  3   15
+shoulder bridge: 1   5
