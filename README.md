@@ -1,15 +1,14 @@
 Training application to output exercises selected at random, with repetitions selected at random.
 
-Example of interactive command line session. Enter outputs a new exercise and q
-  and enter will exit the program.
+Example of interactive command line session. Enter outputs a new exercise and q and enter will exit the program.
   <pre>
   php cliRandy.php
   </pre>
   <pre>
   back extension 6
-  <Enter>
+  
   shoulder bridge 2
-  <Enter>
+  
   tiger pushup 5
   q
   </pre>
