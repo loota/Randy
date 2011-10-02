@@ -1,5 +1,5 @@
-sukelluspunnerrus:   1   10
-kyykky:              1   10
-istumaannousu:       2   12
-selkäliike:          3   15
-hartiasilta:         1   5
+tiger pushup:    1   10
+squat:           1   10
+sit-up:          2   12
+back extension:  3   15
+shoulder bridge: 1   5

@@ -6,6 +6,11 @@ require_once 'randy.php';
  *  <Enter>          - show one exercise
  *  <Number> <Enter> - show <Number> exercises
  *  q                - Exit
+ *
+ *  Error codes:
+ *  1 can't open file containing the exercises
+ *  2 exercises given as an argument several times
+ *  3 invalid option
  */
 class CommandLineExerciser extends Exerciser {
     public function startInteractiveMode() {
@@ -51,15 +56,17 @@ class ExerDriver
             array_shift($options);
 
             foreach ($options as $optionString) {
-                $optionSplit = split('=', $optionString);
+                $optionSplit = preg_split('/=/', $optionString);
                 $option = $optionSplit[0];
-                $optionValue = $optionSplit[1];
+                if (count($optionSplit) > 1) {
+                    $optionValue = $optionSplit[1];
+                }
                 switch ($option) {
                     case is_numeric($option) :
                         if ($this->numberOfExercises) {
                             echo 'cliRandy: number of exercises must be given only once.' . "\n";
                             echo "Try `php cliRandy.php --help' for more information\n";
-                            exit();
+                            exit(2);
                         }
                         $this->numberOfExercises = $option;
                         break;
@@ -73,12 +80,13 @@ class ExerDriver
                         $this->_filename = $optionValue;
                         break;
                     case '--help':
-                        exit($this->_usage());
+                        echo $this->_usage();
+                        exit();
                         break;
                     default:
                         echo "cliRandy: invalid option -- '" . $option . "'\n\n";
                         echo "Try `php cliRandy.php --help' for more information\n";
-                        exit();
+                        exit(3);
 
                 }
             }
@@ -111,7 +119,12 @@ class ExerDriver
     {
         $this->_checkOptions($options);
 
-        $exer = new CommandLineExerciser($this->_filename);
+        try {
+            $exer = new CommandLineExerciser($this->_filename);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            exit(1);
+        }
         $exer->addView(new CommandLineView());
 
         if ($this->_logging) {

@@ -20,9 +20,25 @@ class WebView implements View {
     }
 }
 
-$exer = new Exerciser();
+try {
+    $exer = new Exerciser();
+} catch (Exception $e) {
+    echo '<html>';
+    echo '<body>';
+    echo '<span>';
+    echo $e->getMessage();
+    echo '</span>';
+    echo '</body>';
+    echo '</html>';
+    exit(2);
+}
 $exer->addView(new WebView());
-$number = $_GET['number'];
+$number = 1;
+if (is_array($_GET) && count($_GET) > 0) {
+    if ($_GET['number']) {
+        $number = $_GET['number'];
+    }
+} 
 if ($number > 0) {
     $exer->showExercises($number);
 } else {

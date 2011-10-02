@@ -1,9 +1,12 @@
 <?php
+error_reporting(E_ALL);
 /**
  *  The Exerciser class outputs to View objects, which are defined by the 
  *  subclass. 
  *
- *  The main data format for exercises is the following:
+ *  There are two data structures used:
+ *
+ *  1) The main data format specification for exercises is the following:
  *  Each exercise consists in a key, which is the name of the exercise 
  *  and the value, which is an array containing two cells. The first number 
  *  contains the minimum number of repetitions, and the second cell contains 
@@ -18,6 +21,10 @@
  *           string(3) "10"
  *         }
  *     }
+ *
+ *   2) The view data format is otherwise the same, but the first numeric value 
+ *   in the innermost array means the number of exercises. The view data format 
+ *   doesn't have a second cell for maximum repetitions. @see View
  */
 class Exerciser
 {
@@ -42,6 +49,8 @@ class Exerciser
      *
      *   squat:   1   10
      *   crunch:  4   14
+     *
+     * @throws Exception if not able to open given file
      */
     public function __construct($filename = false)
     {
@@ -54,10 +63,14 @@ class Exerciser
     /**
      * @param string $filename filename containing configuration data. @see 
      * __construct for the format.
+     * @throws Exception if not able to open given file
      */
     private function _getExercisesFromFile($filename)
     {
         $exercises = array();
+        if (!is_file($filename)) {
+            throw new Exception("Can't open file:" . $filename);
+        }
         $lines = file($filename);
         foreach ($lines as $line) {
             $exerciseArray = preg_split('/:/', $line);
