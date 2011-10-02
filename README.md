@@ -25,7 +25,7 @@ Example usage for obtaining a list of three exercises:
   tiger pushup 3
   </pre>
 
-Configuration format:
+Configuration format (name, minimum possible repetitions, maximum possible repetitions):
 
 <pre>
   tiger pushup:    1   10
@@ -33,5 +33,4 @@ Configuration format:
   sit-up:          2   12
   back extension:  3   15
   shoulder bridge: 1   5
-
 </pre>
