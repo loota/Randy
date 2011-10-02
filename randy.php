@@ -115,7 +115,7 @@ class Exerciser
         return $repetitions;
     }
 
-    /*
+    /**
      * @param int $number
      */
     public function showExercises($number)
