@@ -7,9 +7,9 @@ Example of interactive command line session. Enter outputs a new exercise and q
   </pre>
   <pre>
   back extension 6
-  Enter
+  <Enter>
   shoulder bridge 2
-  Enter
+  <Enter>
   tiger pushup 5
   q
   </pre>
