@@ -2,7 +2,9 @@ Training application to output exercises selected at random, with repetitions se
 
 Example of interactive command line session. Enter outputs a new exercise and q
   and enter will exit the program.
-  `php cliRandy.php`
+  <pre>
+  php cliRandy.php
+  </pre>
   <pre>
   back extension 6
   Enter
@@ -13,7 +15,9 @@ Example of interactive command line session. Enter outputs a new exercise and q
   </pre>
 
 Example usage for obtaining a list of three exercises:
-  `php cliRandy.php 3`
+  <pre>
+  php cliRandy.php 3
+  </pre>
 
   <pre>
   sit-up 7
