@@ -1,6 +1,6 @@
 Training application to output exercises selected at random, with repetitions selected at random.
 
-= Example of interactive command line session. Enter outputs a new exercise and q
+Example of interactive command line session. Enter outputs a new exercise and q
   and enter will exit the program.
   `php cliRandy.php`
   <pre>
@@ -12,7 +12,7 @@ Training application to output exercises selected at random, with repetitions se
   q
   </pre>
 
-== Example usage for obtaining a list of three exercises:
+Example usage for obtaining a list of three exercises:
   `php cliRandy.php 3`
 
   <pre>
@@ -21,7 +21,7 @@ Training application to output exercises selected at random, with repetitions se
   tiger pushup 3
   </pre>
 
-=== Configuration format:
+Configuration format:
 
 <pre>
   tiger pushup:    1   10
