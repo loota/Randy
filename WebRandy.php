@@ -22,11 +22,14 @@ class WebView implements View {
 
 try {
     $exer = new Exerciser();
-    $exer->setExercisesFromFile();
 } catch (Exception $e) {
+    echo '<html>';
+    echo '<body>';
     echo '<span>';
     echo $e->getMessage();
     echo '</span>';
+    echo '</body>';
+    echo '</html>';
     exit(2);
 }
 $exer->addView(new WebView());

@@ -120,8 +120,7 @@ class ExerDriver
         $this->_checkOptions($options);
 
         try {
-            $exer = new CommandLineExerciser();
-            $exer->setExercisesFromFile($this->_filename);
+            $exer = new CommandLineExerciser($this->_filename);
         } catch (Exception $e) {
             echo $e->getMessage();
             exit(1);

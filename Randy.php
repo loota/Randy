@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 /**
  *  The Exerciser class outputs to View objects, which are defined by the 
  *  subclass. 
@@ -57,17 +58,27 @@ class Exerciser
      *   squat:   1   10
      *   crunch:  4   14
      *
-     * @throws InvalidArgumentException if not able to open given file
+     * @throws Exception if not able to open given file
      */
     public function setExercisesFromFile($filename = false)
     {
         if (!$filename) {
             $filename = 'exercises/default.txt';
         }
-        if (!is_file($filename)) {
-            throw new InvalidArgumentException("Can't open file:" . $filename);
-        }
+        $this->_routines = $this->_getExercisesFromFile($filename);
+    }
+
+    /**
+     * @param string $filename filename containing configuration data. @see 
+     * __construct for the format.
+     * @throws Exception if not able to open given file
+     */
+    private function _getExercisesFromFile($filename)
+    {
         $exercises = array();
+        if (!is_file($filename)) {
+            throw new Exception("Can't open file:" . $filename);
+        }
         $lines = file($filename);
         foreach ($lines as $line) {
             $exerciseArray = preg_split('/:/', $line);
