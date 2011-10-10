@@ -3,7 +3,7 @@
 // Use a GET parameter named 'number' to signify how many exercises should be shown. If 
 // there is no such parameter, shows one exercise.
 
-require_once 'randy.php';
+require_once 'Randy.php';
 
 class WebView implements View {
     /**

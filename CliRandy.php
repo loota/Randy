@@ -1,5 +1,5 @@
 <?php
-require_once 'randy.php';
+require_once 'Randy.php';
 
 /**
  * Interactive command line input. Commands:

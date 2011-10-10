@@ -1,6 +1,6 @@
 <?php
 require_once 'PHPUnit/Framework.php';
-require_once "randy.php";
+require_once "Randy.php";
 
 class OutputCapturingView implements View
 {

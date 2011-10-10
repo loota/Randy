@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 /**
  *  The Exerciser class outputs to View objects, which are defined by the 
  *  subclass. 
@@ -176,7 +175,7 @@ class FileLoggingView implements View {
         foreach ($exercises as $exercise) {
             $name = key($exercise);
             $repetitions = array_pop($exercise);
-            file_put_contents('exerciseLogs/' . $this->startTime . '.txt', 
+            file_put_contents('logs/' . $this->startTime . '.txt', 
                 $name . ' ' . $repetitions . "\n", FILE_APPEND);
         }
     }
