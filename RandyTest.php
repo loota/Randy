@@ -11,7 +11,7 @@ class OutputCapturingView implements View
     }
 }
  
-class randyTest extends PHPUnit_Framework_TestCase
+class RandyTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp()
