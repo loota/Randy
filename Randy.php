@@ -39,37 +39,35 @@ class Exerciser
     private $_views = array();
 
     /**
-     * @param string name of file containing exercise configuration.
-     * Given file must contain one line per exercise. Each line must contain
-     * the exercise name ending with a colon (:), minimum repetitions and maximum repetitions. 
-     * The min and max numbers must be separated by spaces.
+     * @param array $exercises
+     */
+    public function setExercises($exercises)
+    {
+        $this->_routines = $exercises;
+    }
+
+    /**
+     * @param string $filename file containing exercise configuration data.
+     *  Given file must contain one line per exercise. Each line must contain
+     *  the exercise name ending with a colon (:), minimum repetitions and maximum repetitions. 
+     *  The min and max numbers must be separated by spaces.
      *
-     * Example:
+     *  Example:
      *
      *   squat:   1   10
      *   crunch:  4   14
      *
-     * @throws Exception if not able to open given file
+     * @throws InvalidArgumentException if not able to open given file
      */
-    public function __construct($filename = false)
+    public function setExercisesFromFile($filename = false)
     {
         if (!$filename) {
             $filename = 'exercises/default.txt';
         }
-        $this->_routines = $this->_getExercisesFromFile($filename);
-    }
-
-    /**
-     * @param string $filename filename containing configuration data. @see 
-     * __construct for the format.
-     * @throws Exception if not able to open given file
-     */
-    private function _getExercisesFromFile($filename)
-    {
-        $exercises = array();
         if (!is_file($filename)) {
-            throw new Exception("Can't open file:" . $filename);
+            throw new InvalidArgumentException("Can't open file:" . $filename);
         }
+        $exercises = array();
         $lines = file($filename);
         foreach ($lines as $line) {
             $exerciseArray = preg_split('/:/', $line);
@@ -82,7 +80,7 @@ class Exerciser
             $routine = array($exerciseName => array($minimum, $maximum));
             $exercises[] = $routine;
         }
-        return $exercises;
+        $this->setExercises($exercises);
     }
 
     /**
@@ -172,6 +170,9 @@ class FileLoggingView implements View {
      */
     public function show(array $exercises)
     {
+        if (!is_dir('logs')) {
+            mkdir('logs');
+        }
         foreach ($exercises as $exercise) {
             $name = key($exercise);
             $repetitions = array_pop($exercise);

@@ -10,26 +10,23 @@ class WebView implements View {
      * @param array $exercises view data format @see View
      */
     public function show(array $exercises) {
-        echo "<html>\n<dl>\n";
+        echo "<dl>\n";
         foreach ($exercises as $exercise) {
             $name = key($exercise);
             $repetitions = array_pop($exercise);
             echo "<dt>$name</dt><dd>$repetitions</dd>\n";
         }
-        echo "</dl>\n</html>";
+        echo "</dl>\n";
     }
 }
 
 try {
     $exer = new Exerciser();
+    $exer->setExercisesFromFile();
 } catch (Exception $e) {
-    echo '<html>';
-    echo '<body>';
     echo '<span>';
     echo $e->getMessage();
     echo '</span>';
-    echo '</body>';
-    echo '</html>';
     exit(2);
 }
 $exer->addView(new WebView());

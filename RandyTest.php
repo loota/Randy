@@ -16,21 +16,11 @@ class RandyTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        file_put_contents('/tmp/test-exercise-file.txt', 'test: 4 9');
-        $this->exerciser = new Exerciser('/tmp/test-exercise-file.txt');
+        $exercises = array(array('test' => array('4', '9')));
+        $this->exerciser = new Exerciser();
+        $this->exerciser->setExercises($exercises);
         $this->outputCapturingView = new OutputCapturingView();
         $this->exerciser->addView($this->outputCapturingView);
-        unlink('/tmp/test-exercise-file.txt');
-    }
-
-    public function testUsingConfigurationFile()
-    {
-        $exerciser = $this->exerciser;
-        $exerciser->showExercises(3);
-        $exerciseSet = array_pop($this->outputCapturingView->messages);
-        foreach ($exerciseSet as $message) {
-            $this->assertEquals(key($message), 'test');
-        }
     }
 
     public function testNumberOfExercises()
