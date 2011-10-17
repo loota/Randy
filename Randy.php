@@ -94,16 +94,17 @@ class Exerciser
     }
 
     /**
-     * @return string
+     * @return array $exerciseData the main data format. @see Exerciser
      */
     private function _getRandomExercise()
     {
-        $routineName = $this->_routines[mt_rand(0, count($this->_routines) - 1)];
-        return $routineName;
+        $routineData = $this->_routines[mt_rand(0, count($this->_routines) - 1)];
+        return $routineData;
     }
 
     /**
      * @param array $exerciseData the main data format. @see Exerciser
+     * @return int $repetitions
      */
     private function _getRandomRepetitions(array $exerciseData)
     {
