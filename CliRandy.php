@@ -99,7 +99,7 @@ class ExerDriver
      */
     private function _usage()
     {
-        $usage = "Usage: php cliRandy.php [-n] [--no-log] [-f filename] [number of exercises]
+        $usage = "Usage: php cliRandy.php [-n] [--no-log] [-f=filename] [number of exercises]
         Show <number> of exercises
         
         * start interactive mode
